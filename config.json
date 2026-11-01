@@ -1,0 +1,43 @@
+{
+  "canvas": [1500, 2009],
+  "background": "plate.webp",
+  "base": "base.webp",
+  "layers": [
+    {
+      "id": "shirt",
+      "name": "Camisa",
+      "slot": 0,
+      "box": [409, 107, 678, 820],
+      "z": 10,
+      "focus": [750, 483, 1.55],
+      "colors": ["Blanco", "Negro", "Rosa", "Rojo", "azul marino", "azul claro", "azul francia", "bordo", "verde militar"]
+    },
+    {
+      "id": "pants",
+      "name": "Pantalón",
+      "slot": 1,
+      "box": [480, 691, 539, 1133],
+      "z": 8,
+      "focus": [750, 1300, 1.32],
+      "colors": ["Blanco", "Gris", "Negro", "Verde militar", "Azul marino", "Beige"]
+    },
+    {
+      "id": "shoes",
+      "name": "Zapatos",
+      "slot": 2,
+      "box": [532, 1786, 451, 168],
+      "z": 6,
+      "focus": [750, 1850, 2.4],
+      "colors": ["Marrón claro", "Negro mate", "Marrón oscuro", "Negro charol"]
+    },
+    {
+      "id": "belt",
+      "name": "Cinturón",
+      "slot": 3,
+      "box": [546, 697, 411, 88],
+      "z": 12,
+      "focus": [750, 742, 2.4],
+      "colors": ["Marron claro", "Negro", "Marron oscuro"]
+    }
+  ]
+}

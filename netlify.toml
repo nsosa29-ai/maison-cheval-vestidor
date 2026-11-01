@@ -1,0 +1,12 @@
+# El script y la configuración se revisan siempre, así los cambios llegan a la tienda al instante.
+[[headers]]
+  for = "/vestidor.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/config.json"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    Access-Control-Allow-Origin = "*"
