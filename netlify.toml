@@ -1,7 +1,7 @@
 # Sitio estático: no hay que compilar nada, se publica la carpeta tal cual.
 [build]
   publish = "."
-  command = ""
+  command = "echo Sitio estatico, sin build"
 
 # El script y la configuración se revisan siempre, así los cambios llegan a la tienda al instante.
 [[headers]]
