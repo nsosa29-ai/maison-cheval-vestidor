@@ -113,6 +113,7 @@
 
   function frame() {
     if (!root) return;
+    paint();
     var w = root.clientWidth, h = root.clientHeight;
     var f = view ? view.focus : [W / 2, H / 2, 1];
     var s = f[2];
@@ -124,13 +125,15 @@
   }
 
   function paint() {
+    if (!lab) return;
     lab.textContent = view ? view.name : "Vestidor";
     var full = auto && view;          // hay zoom: ofrecer ver todo
     var back = !auto;                 // vista fija: ofrecer volver a acercar
     hint.classList.toggle("show", !!(full || back));
     hint.classList.toggle("alt", back);
     hint.querySelector(".mc-i").innerHTML = back ? ICON_ZOOM : ICON_FULL;
-    hint.querySelector(".mc-t").textContent = back ? "Acercar prendas" : "Ver outfit completo";
+    var narrow = root.clientWidth < 400; // en celular, texto corto para no chocar con la etiqueta de la izquierda
+    hint.querySelector(".mc-t").textContent = back ? (narrow ? "Acercar" : "Acercar prendas") : (narrow ? "Ver todo" : "Ver outfit completo");
     hint.setAttribute("aria-label", back ? "Acercar cada prenda al elegirla" : "Ver el outfit completo");
   }
 
