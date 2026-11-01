@@ -27,12 +27,15 @@
     "@keyframes mcsw{0%{opacity:1;background-position:120% 0}100%{opacity:0;background-position:-30% 0}}",
     "#mc-vest .mc-pill{position:absolute;top:12px;z-index:30;background:#0d0b09cc;padding:5px 10px;border-radius:999px;font:500 11px/1.4 'Cinzel',Georgia,serif;letter-spacing:.25em;color:#c9a24f;text-transform:uppercase;border:0;margin:0}",
     "#mc-vest .mc-lab{left:12px}",
-    /* La etiqueta de la derecha muestra la prenda enfocada y, cuando hay zoom, sirve para volver al outfit completo.
-       Reemplaza al botón de abajo, que en celular tapaba los zapatos. */
-    "#mc-vest .mc-hint{right:12px;color:#efe6d6;font-family:Arial,sans-serif;letter-spacing:.12em;cursor:default}",
-    "#mc-vest .mc-hint.zoom{cursor:pointer;border:1px solid #c9a24f88}",
-    "#mc-vest .mc-hint .mc-x{display:none;margin-left:6px;color:#c9a24f}",
-    "#mc-vest .mc-hint.zoom .mc-x{display:inline}",
+    /* Botón de arriba a la derecha (abajo tapaba los zapatos en celular).
+       "Ver outfit completo": vuelve a la vista entera y la deja fija mientras se eligen colores.
+       "Acercar prendas": vuelve a enfocar cada prenda al elegirla. */
+    "#mc-vest .mc-hint{right:12px;display:none;align-items:center;gap:6px;min-height:32px;padding:6px 14px;background:#c9a24f;color:#0d0b09;font:700 11px/1 Arial,sans-serif;letter-spacing:.12em;cursor:pointer;box-shadow:0 2px 8px #0005;transition:background .2s}",
+    "#mc-vest .mc-hint.show{display:inline-flex}",
+    "#mc-vest .mc-hint:hover{background:#dbb560}",
+    "#mc-vest .mc-hint:focus-visible{outline:2px solid #fff;outline-offset:2px}",
+    "#mc-vest .mc-hint.alt{background:#0d0b09cc;color:#efe6d6;border:1px solid #c9a24f88}",
+    "#mc-vest .mc-hint svg{width:14px;height:14px;flex:none}",
     "#mc-vest .mc-load{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:#c9c9cb;color:#555;font:12px Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase}",
     "@media (prefers-reduced-motion:reduce){#mc-vest .mc-cam,#mc-vest img.mc-l{transition:none}#mc-vest .mc-sweep.go{animation:none}}"
   ].join("\n");
@@ -41,9 +44,13 @@
     return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
   }
 
-  var cfg, W, H, root, cam, hint, sweep;
+  var cfg, W, H, root, cam, hint, lab, sweep;
   var bySlot = {};
   var view = null; // capa enfocada o null = outfit completo
+  var auto = true; // true = al elegir un color se acerca a esa prenda
+  var last = null; // última prenda tocada
+  var ICON_FULL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  var ICON_ZOOM = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>';
 
   function place(el, box) {
     el.style.left = (box[0] / W) * 100 + "%";
@@ -61,13 +68,18 @@
     root.id = "mc-vest";
     root.innerHTML =
       '<span class="mc-pill mc-lab">Vestidor</span>' +
-      '<button type="button" class="mc-pill mc-hint" aria-label="Ver outfit completo"><span class="mc-t">Outfit completo</span><span class="mc-x">✕</span></button>' +
+      '<button type="button" class="mc-pill mc-hint"><span class="mc-i"></span><span class="mc-t"></span></button>' +
       '<div class="mc-cam"></div><div class="mc-sweep"></div>' +
       '<div class="mc-load">Preparando el probador…</div>';
     cam = root.querySelector(".mc-cam");
     hint = root.querySelector(".mc-hint");
     sweep = root.querySelector(".mc-sweep");
-    hint.onclick = function () { if (view) focus(null); };
+    lab = root.querySelector(".mc-lab");
+    hint.onclick = function () {
+      if (auto && view) { auto = false; focus(null); }   // ver outfit completo y dejarlo fijo
+      else { auto = true; focus(last); }                  // volver a acercar prendas
+    };
+    paint();
 
     var loads = [];
     function img(file, box, z, cls) {
@@ -111,10 +123,20 @@
     cam.style.transform = "translate(" + x + "px," + y + "px) scale(" + s + ")";
   }
 
+  function paint() {
+    lab.textContent = view ? view.name : "Vestidor";
+    var full = auto && view;          // hay zoom: ofrecer ver todo
+    var back = !auto;                 // vista fija: ofrecer volver a acercar
+    hint.classList.toggle("show", !!(full || back));
+    hint.classList.toggle("alt", back);
+    hint.querySelector(".mc-i").innerHTML = back ? ICON_ZOOM : ICON_FULL;
+    hint.querySelector(".mc-t").textContent = back ? "Acercar prendas" : "Ver outfit completo";
+    hint.setAttribute("aria-label", back ? "Acercar cada prenda al elegirla" : "Ver el outfit completo");
+  }
+
   function focus(L) {
     view = L;
-    hint.querySelector(".mc-t").textContent = L ? L.name : "Outfit completo";
-    hint.classList.toggle("zoom", !!L);
+    paint();
     frame();
   }
 
@@ -146,7 +168,7 @@
         }
       }
     }
-    if (animate) focus(L);
+    if (animate) { last = L; if (auto) focus(L); }
   }
 
   document.addEventListener("change", function (e) {
