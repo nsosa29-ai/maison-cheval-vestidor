@@ -7,7 +7,7 @@
       "id": "shirt",
       "name": "Camisa",
       "slot": 0,
-      "box": [409, 107, 678, 820],
+      "box": [410, 100, 690, 845],
       "z": 10,
       "focus": [750, 483, 1.55],
       "colors": ["Blanco", "Negro", "Rosa", "Rojo", "azul marino", "azul claro", "azul francia", "bordo", "verde militar"]
