@@ -31,6 +31,10 @@
     ".js-search-expand-form,.search-floating-container{display:none!important}",
     ".sticky-header-wrapper{background:#0A0908!important}",
     "@media(max-width:767px){.head-main .head-row{padding-top:4px!important;padding-bottom:4px!important;grid-template-rows:auto!important;row-gap:0!important}}",
+    /* Inicio: foto de fondo del bloque principal (el hombre a la izquierda, el texto sobre la parte oscura). */
+    "#ns-block-slide_1 .media-visual{position:relative;background:#0A0908 url(" + BASE + "hero-fondo.webp) 0% 12%/cover no-repeat}",
+    "#ns-block-slide_1 .media-visual img{visibility:hidden}",
+    "@media(min-width:768px){#ns-block-slide_1 .media-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,9,8,0) 42%,rgba(10,9,8,.55) 62%,rgba(10,9,8,.7) 100%);pointer-events:none}#ns-block-slide_1 .media-content{left:auto!important;right:0!important;width:50%!important}}",
     /* Espacios entre secciones. */
     "#ns-section-rich-text_1793496225546 .btn{margin:0 0 32px!important}",
     "[id^='ns-section-rich-text_']{padding-top:36px!important}",
