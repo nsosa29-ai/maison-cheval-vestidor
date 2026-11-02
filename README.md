@@ -10,6 +10,8 @@ Netlify publica esta carpeta y Google Tag Manager carga `vestidor.js` en la pág
    `n` es la posición en esa lista, empezando en 0. El nombre tiene que coincidir con el de
    Tienda Nube (no importan mayúsculas ni acentos).
 
+Si es un color de pantalón, subir también `loops-<n>.webp` (las presillas de ese color, que van sobre el cinturón).
+
 ## Cómo agregar una prenda nueva (por ejemplo, relojes)
 Agregar un bloque en `layers` de `config.json` con `id`, `name`, `slot` (posición de la prenda en el
 combo, empezando en 0), `box` (x, y, ancho, alto sobre un lienzo de 1500×2009), `z` (orden de capa),

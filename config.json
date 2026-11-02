@@ -16,8 +16,9 @@
       "id": "pants",
       "name": "Pantalón",
       "slot": 1,
-      "box": [480, 691, 539, 1133],
+      "box": [470, 691, 559, 1175],
       "z": 8,
+      "over": { "id": "loops", "box": [540, 682, 420, 130], "z": 13 },
       "focus": [750, 1300, 1.32],
       "colors": ["Blanco", "Gris", "Negro", "Verde militar", "Azul marino", "Beige"]
     },
@@ -34,9 +35,9 @@
       "id": "belt",
       "name": "Cinturón",
       "slot": 3,
-      "box": [546, 697, 411, 88],
+      "box": [540, 682, 420, 130],
       "z": 12,
-      "focus": [750, 742, 2.4],
+      "focus": [750, 752, 2.4],
       "colors": ["Marron claro", "Negro", "Marron oscuro"]
     }
   ]

@@ -16,7 +16,7 @@
   var REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var CSS = [
-    "#mc-vest{position:relative;width:100%;aspect-ratio:1500/2009;overflow:hidden;background:#c9c9cb;border-radius:4px}",
+    "#mc-vest{position:relative;width:100%;aspect-ratio:1500/2009;overflow:hidden;background:#b1a99a;border-radius:4px}",
     "#mc-vest .mc-cam{position:absolute;inset:0;transform-origin:0 0;transition:transform .7s cubic-bezier(.65,.05,.25,1);will-change:transform}",
     "#mc-vest img{position:absolute;display:block;max-width:none;margin:0;padding:0;border:0;user-select:none;-webkit-user-drag:none;pointer-events:none}",
     "#mc-vest img.mc-l{opacity:0;visibility:hidden;transition:opacity .3s ease}",
@@ -36,7 +36,7 @@
     "#mc-vest .mc-hint:focus-visible{outline:2px solid #fff;outline-offset:2px}",
     "#mc-vest .mc-hint.alt{background:#0d0b09cc;color:#efe6d6;border:1px solid #c9a24f88}",
     "#mc-vest .mc-hint svg{width:14px;height:14px;flex:none}",
-    "#mc-vest .mc-load{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:#c9c9cb;color:#555;font:12px Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase}",
+    "#mc-vest .mc-load{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:#b1a99a;color:#3d382f;font:12px Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase}",
     "@media (prefers-reduced-motion:reduce){#mc-vest .mc-cam,#mc-vest img.mc-l{transition:none}#mc-vest .mc-sweep.go{animation:none}}"
   ].join("\n");
 
@@ -101,6 +101,13 @@
       L.imgs = L.colors.map(function (_, n) {
         return img(L.id + "-" + n + ".webp", L.box, L.z, "mc-l" + (n === 0 ? " on" : ""));
       });
+      // Capa extra que cambia con este color pero va por encima de otra prenda
+      // (por ejemplo, las presillas del pantalón sobre el cinturón).
+      if (L.over) {
+        L.overImgs = L.colors.map(function (_, n) {
+          return img(L.over.id + "-" + n + ".webp", L.over.box, L.over.z, "mc-l" + (n === 0 ? " on" : ""));
+        });
+      }
       bySlot[L.slot] = L;
     });
     Promise.all(loads).then(function () { root.querySelector(".mc-load").style.display = "none"; });
@@ -143,16 +150,21 @@
     frame();
   }
 
-  function show(L, n, animate) {
-    if (n < 0 || n === L.cur || !L.imgs) return;
-    var prev = L.imgs[L.cur], next = L.imgs[n];
-    L.imgs.forEach(function (i) { if (i !== prev && i !== next) i.classList.remove("on", "under"); });
+  function swap(imgs, from, to, z, animate) {
+    var prev = imgs[from], next = imgs[to];
+    imgs.forEach(function (i) { if (i !== prev && i !== next) i.classList.remove("on", "under"); });
     prev.classList.remove("on");
     prev.classList.add("under");
-    next.style.zIndex = L.z + 1;
+    next.style.zIndex = z + 1;
     next.classList.add("on");
-    var done = function () { prev.classList.remove("under"); next.style.zIndex = L.z; };
+    var done = function () { prev.classList.remove("under"); next.style.zIndex = z; };
     if (REDUCED || !animate) done(); else setTimeout(done, 320);
+  }
+
+  function show(L, n, animate) {
+    if (n < 0 || n === L.cur || !L.imgs) return;
+    swap(L.imgs, L.cur, n, L.z, animate);
+    if (L.overImgs) swap(L.overImgs, L.cur, n, L.over.z, animate);
     L.cur = n;
     if (animate && !REDUCED) { sweep.classList.remove("go"); void sweep.offsetWidth; sweep.classList.add("go"); }
   }
