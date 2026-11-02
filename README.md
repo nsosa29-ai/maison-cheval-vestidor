@@ -16,3 +16,8 @@ Si es un color de pantalón, subir también `loops-<n>.webp` (las presillas de e
 Agregar un bloque en `layers` de `config.json` con `id`, `name`, `slot` (posición de la prenda en el
 combo, empezando en 0), `box` (x, y, ancho, alto sobre un lienzo de 1500×2009), `z` (orden de capa),
 `focus` (x, y, zoom) y `colors`.
+
+## Ajustes de la tienda
+`vestidor.js` también aplica, en todas las páginas, los ajustes que el editor de Tienda Nube no permite: solo se vende el combo (las prendas sueltas redirigen a él), el carrito muestra el color elegido y el precio único, y hay correcciones visuales en el inicio y el encabezado. Si cambia el precio del combo, actualizar `COMBO_PRICE`.
+
+`estatus-fix.webp` son los textos corregidos que van encima de la imagen Estatus / Velocidad / Oportunidad.

@@ -10,7 +10,7 @@
       "box": [410, 100, 690, 845],
       "z": 10,
       "focus": [750, 483, 1.55],
-      "colors": ["Blanco", "Negro", "Rosa", "Rojo", "azul marino", "azul claro", "azul francia", "bordo", "verde militar"]
+      "colors": ["Blanco", "Negro", "Rosa", "Rojo", "Azul marino", "Azul claro", "Azul francia", "Bordó", "Verde militar"]
     },
     {
       "id": "pants",
@@ -38,7 +38,7 @@
       "box": [540, 682, 420, 130],
       "z": 12,
       "focus": [750, 752, 2.4],
-      "colors": ["Marron claro", "Negro", "Marron oscuro"]
+      "colors": ["Marrón claro", "Negro", "Marrón oscuro"]
     }
   ]
 }

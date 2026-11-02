@@ -1,4 +1,235 @@
 /*
+ * Ajustes de la tienda Maison Cheval (corre en todas las páginas de la tienda).
+ * - Solo se vende el outfit completo: oculta y redirige las prendas sueltas.
+ * - Carrito: foto del color elegido, precio único del combo y total correcto.
+ * - Inicio y encabezado: arreglos visuales que el editor de Tienda Nube no permite.
+ */
+(function () {
+  if (window.__mcTienda || /^\/admin/.test(location.pathname)) return;
+  window.__mcTienda = true;
+
+  var COMBO_URL = "/productos/outfit-combo-vvmz65/";
+  var COMBO_ID = "378243472";
+  var COMBO_PRICE = 149000;
+  // Las cinco prendas del combo. El valor es el id de la capa del vestidor (el reloj no tiene colores).
+  var PIEZAS = { "378236786": "shirt", "378237068": "pants", "378238684": "shoes", "378238946": "belt", "378239316": null };
+
+  var path = location.pathname;
+  var script = document.currentScript;
+  var BASE = script ? script.src.replace(/[^/]*(\?.*)?$/, "") : "https://subtle-centaur-dc0a3a.netlify.app/";
+
+  // Prendas sueltas y buscador: todo lleva al armador del outfit.
+  if ((/^\/productos\/[^/]+/.test(path) && !/^\/productos\/outfit-combo/.test(path)) || /^\/search(\/|$)/.test(path)) {
+    location.replace(COMBO_URL);
+    return;
+  }
+
+  var CSS = [
+    /* Inicio en celular: la copia del carrusel se mostraba como un segundo bloque principal. */
+    "#ns-section-slideshow .swiper-slide.swiper-slide-duplicate{display:none!important}",
+    /* Encabezado: sin buscador y con fondo sólido para que no se transparente el contenido. */
+    ".js-search-expand-form,.search-floating-container{display:none!important}",
+    ".sticky-header-wrapper{background:#0A0908!important}",
+    /* Espacios entre secciones. */
+    "#ns-section-rich-text_1793496225546 .btn{margin:0 0 32px!important}",
+    "[id^='ns-section-rich-text_']{padding-top:36px!important}",
+    "#ns-section-banners_grid_3_vertical{padding-top:32px!important}",
+    "#ns-section-banners_grid_3_vertical::before{margin-bottom:28px!important}",
+    "#ns-section-icon-text_1793497152414{padding:32px 0!important}",
+    "#ns-section-newsletter_1793497205771{padding:0 16px 40px!important}",
+    /* Imagen Estatus / Velocidad / Oportunidad: textos corregidos encima de la imagen. */
+    "#ns-block-slide_2 .media-visual{position:relative}",
+    "#mc-estatus-fix{position:absolute;inset:0;width:100%!important;height:100%!important;max-width:none;object-fit:fill;opacity:1!important;pointer-events:none;content:none}",
+    /* Listado: solo el combo, con su precio único. */
+    ".js-item-product:not([data-product-id='" + COMBO_ID + "']){display:none!important}",
+    ".js-category-controls,.page-header-count{display:none!important}",
+    ".product-item-price-compare,.product-item-discount{display:none!important}",
+    /* Página del combo: mientras carga Bundle Flow no se muestra el botón ni el precio de fábrica. */
+    "form[data-store='product-form-" + COMBO_ID + "'] .form-quantity-container,form[data-store='product-form-" + COMBO_ID + "'] .buy-button-container{display:none!important}",
+    ".template-product .js-price-container{display:none!important}",
+    "form[data-store='product-form-" + COMBO_ID + "'] .product-actions:not(:has(.bf-mix-match))::before{content:'Cargando opciones…';display:block;padding:32px 0;text-align:center;color:#BDB19C;font-size:18px}",
+    /* Textos de ejemplo del tema. */
+    "#ns-block-icon_returns,#ns-block-icon_security{display:none!important}",
+    /* Recuadro del combo. */
+    ".bf-mix-match-title{color:#140F08!important}",
+    ".bf-mix-match-title::after{margin-left:0!important}",
+    ".bf-mix-match-summary-list,.bf-mix-match-summary-savings{display:none!important}",
+    /* Carrito: el outfit se compra entero. */
+    ".mc-combo .cart-item-quantity,.mc-combo .cart-item-delete,.mc-combo .cart-item-subtotal,.mc-combo .js-total-promotions{display:none!important}",
+    ".js-payment-discount-price-cart-container,.cart-continue-shopping{display:none!important}",
+    ".mc-thumb{object-fit:contain!important;background:#ECE8E0!important;padding:4px;box-sizing:border-box}",
+    ".mc-vaciar{display:none;background:none;border:0;padding:8px 0;margin:0 0 8px;color:#C9A45C;font:inherit;font-size:15px;text-decoration:underline;cursor:pointer}",
+    ".mc-combo .mc-vaciar{display:inline-block}"
+  ].join("\n");
+  var style = document.createElement("style");
+  style.id = "mc-tienda-css";
+  style.textContent = CSS;
+  (document.head || document.documentElement).appendChild(style);
+
+  // El botón de compra del listado abría una compra rápida del combo sin elegir colores.
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var card = t.closest(".js-item-product[data-product-id='" + COMBO_ID + "']");
+    if (card && t.closest("button,input[type=submit],.js-addtocart,.js-quickshop-modal-open,.btn")) {
+      e.preventDefault();
+      e.stopPropagation();
+      location.href = COMBO_URL;
+    }
+  }, true);
+
+  // Bundle Flow espera la primera interacción para cargar: se lo despierta enseguida.
+  function wakeBundleFlow() {
+    window.dispatchEvent(new Event("scroll"));
+  }
+  if (/^\/productos\/outfit-combo/.test(path)) {
+    if (document.readyState === "complete") setTimeout(wakeBundleFlow, 50);
+    else window.addEventListener("load", function () { setTimeout(wakeBundleFlow, 50); });
+  }
+
+  function norm(s) {
+    return (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+  }
+  function money(n) {
+    var p = n.toFixed(2).split(".");
+    return "$" + p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "," + p[1];
+  }
+  function setText(el, txt) {
+    if (el && el.textContent.trim() !== txt) el.textContent = txt;
+  }
+
+  var colores = null;
+  fetch(BASE + "config.json", { cache: "no-cache" })
+    .then(function (r) { return r.json(); })
+    .then(function (c) {
+      colores = {};
+      c.layers.forEach(function (L) { colores[L.id] = L.colors; });
+      schedule();
+    })
+    .catch(function () {});
+
+  function fixThumb(item) {
+    var capa = PIEZAS[(item.getAttribute("data-store") || "").replace("cart-item-", "")];
+    if (!capa || !colores) return;
+    var img = item.querySelector(".cart-item-image");
+    var variante = item.querySelector(".cart-item-variant");
+    if (!img || !variante) return;
+    var color = norm(variante.textContent.replace(/[()]/g, "").split(",")[0]);
+    var n = (colores[capa] || []).map(norm).indexOf(color);
+    if (n < 0) return;
+    var src = BASE + capa + "-" + n + ".webp";
+    if (img.getAttribute("src") === src) return;
+    img.classList.remove("lazyload");
+    img.removeAttribute("srcset");
+    img.removeAttribute("data-srcset");
+    img.removeAttribute("data-src");
+    img.classList.add("mc-thumb");
+    img.src = src;
+  }
+
+  // Devuelve cuántos outfits completos hay en el carrito (0 si no están las cinco prendas por igual).
+  function outfits(items) {
+    var cant = {};
+    items.forEach(function (it) {
+      var id = (it.getAttribute("data-store") || "").replace("cart-item-", "");
+      var q = it.querySelector(".js-cart-quantity-input");
+      cant[id] = (cant[id] || 0) + (q ? parseInt(q.value, 10) || 0 : 1);
+    });
+    var ids = Object.keys(cant), n = 0;
+    if (ids.length !== Object.keys(PIEZAS).length) return 0;
+    for (var i = 0; i < ids.length; i++) {
+      if (!(ids[i] in PIEZAS) || (n && cant[ids[i]] !== n)) return 0;
+      n = cant[ids[i]];
+    }
+    return n;
+  }
+
+  function fixCart(box) {
+    var items = [].slice.call(box.querySelectorAll(".js-cart-item")).filter(function (it) {
+      return it.style.display !== "none";
+    });
+    items.forEach(fixThumb);
+    var n = outfits(items);
+    box.classList.toggle("mc-combo", n > 0);
+    if (!n) return;
+
+    var coupon = [].some.call(box.querySelectorAll(".js-coupon-discount-row"), function (r) {
+      return getComputedStyle(r).display !== "none";
+    });
+    if (coupon) return;
+
+    var precio = COMBO_PRICE * n;
+    setText(box.querySelector(".js-cart-subtotal"), money(precio));
+    var costo = box.querySelector("#shipping-cost");
+    var envio = 0;
+    if (costo && getComputedStyle(costo).display !== "none") {
+      var m = costo.textContent.replace(/[^\d,]/g, "").replace(",", ".");
+      envio = parseFloat(m) || 0;
+    }
+    var total = box.querySelector(".js-cart-total");
+    if (total) setText(total, "$ " + money(precio + envio).slice(1));
+
+    if (!box.querySelector(".mc-vaciar")) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "mc-vaciar";
+      b.textContent = "Quitar el outfit del carrito";
+      b.onclick = vaciar;
+      var fila = box.querySelector(".cart-subtotals-container");
+      if (fila) fila.parentNode.insertBefore(b, fila);
+    }
+  }
+
+  // Quita las cinco prendas juntas. En la página del carrito el tema recarga al borrar: se sigue al volver.
+  function vaciar() {
+    try { sessionStorage.setItem("mc-vaciar", "1"); } catch (e) {}
+    siguiente();
+  }
+  function siguiente() {
+    var b = document.querySelector("#modal-cart .js-cart-item .js-cart-item-remove") ||
+      document.querySelector("main .js-cart-item .js-cart-item-remove");
+    if (b) {
+      b.click();
+      setTimeout(siguiente, 1500);
+    } else {
+      try { sessionStorage.removeItem("mc-vaciar"); } catch (e) {}
+    }
+  }
+
+  function fixEstatus() {
+    var v = document.querySelector("#ns-block-slide_2 .media-visual");
+    if (v && !document.getElementById("mc-estatus-fix")) {
+      var i = new Image();
+      i.id = "mc-estatus-fix";
+      i.alt = "";
+      i.src = BASE + "estatus-fix.webp";
+      v.appendChild(i);
+    }
+  }
+
+  function run() {
+    fixEstatus();
+    var boxes = [document.getElementById("modal-cart")];
+    if (/^\/comprar/.test(path)) boxes.push(document.querySelector("main"));
+    boxes.forEach(function (b) { if (b) fixCart(b); });
+  }
+
+  var timer;
+  function schedule() {
+    clearTimeout(timer);
+    timer = setTimeout(run, 120);
+  }
+
+  function boot() {
+    run();
+    new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true, characterData: true });
+    try { if (sessionStorage.getItem("mc-vaciar")) setTimeout(siguiente, 800); } catch (e) {}
+  }
+  if (document.body) boot();
+  else document.addEventListener("DOMContentLoaded", boot);
+})();
+
+/*
  * Vestidor Maison Cheval
  * Muestra un maniquí que se viste con los colores elegidos en el combo de Bundle Flow.
  *
