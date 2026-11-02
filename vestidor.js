@@ -30,6 +30,7 @@
     /* Encabezado: sin buscador y con fondo sólido para que no se transparente el contenido. */
     ".js-search-expand-form,.search-floating-container{display:none!important}",
     ".sticky-header-wrapper{background:#0A0908!important}",
+    "@media(max-width:767px){.head-main .head-row{padding-top:4px!important;padding-bottom:4px!important;grid-template-rows:auto!important;row-gap:0!important}}",
     /* Espacios entre secciones. */
     "#ns-section-rich-text_1793496225546 .btn{margin:0 0 32px!important}",
     "[id^='ns-section-rich-text_']{padding-top:36px!important}",
@@ -39,7 +40,7 @@
     "#ns-section-newsletter_1793497205771{padding:0 16px 40px!important}",
     /* Imagen Estatus / Velocidad / Oportunidad: textos corregidos encima de la imagen. */
     "#ns-block-slide_2 .media-visual{position:relative}",
-    "#mc-estatus-fix{position:absolute;inset:0;width:100%!important;height:100%!important;max-width:none;object-fit:fill;opacity:1!important;pointer-events:none;content:none}",
+    "#ns-block-slide_2 .mc-estatus-fix{position:absolute;inset:0;background:url(" + BASE + "estatus-fix.webp) center/100% 100% no-repeat;pointer-events:none}",
     /* Listado: solo el combo, con su precio único. */
     ".js-item-product:not([data-product-id='" + COMBO_ID + "']){display:none!important}",
     ".js-category-controls,.page-header-count{display:none!important}",
@@ -197,14 +198,12 @@
   }
 
   function fixEstatus() {
-    var v = document.querySelector("#ns-block-slide_2 .media-visual");
-    if (v && !document.getElementById("mc-estatus-fix")) {
-      var i = new Image();
-      i.id = "mc-estatus-fix";
-      i.alt = "";
-      i.src = BASE + "estatus-fix.webp";
-      v.appendChild(i);
-    }
+    [].forEach.call(document.querySelectorAll("#ns-block-slide_2 .media-visual"), function (v) {
+      if (v.querySelector(".mc-estatus-fix")) return;
+      var d = document.createElement("div");
+      d.className = "mc-estatus-fix";
+      v.appendChild(d);
+    });
   }
 
   function run() {
