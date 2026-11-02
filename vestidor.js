@@ -36,7 +36,7 @@
     ".mc-precio{display:block;width:fit-content;margin-top:.6em;padding:3px 10px;background:#7A1414;border:1px solid #C9A45C;border-radius:999px;color:#FFF6E3;font-family:Nunito,ui-rounded,'SF Pro Rounded','Helvetica Neue',Arial,sans-serif!important;font-size:max(14px,.62em);font-weight:800;font-variant-numeric:lining-nums;line-height:1.25;letter-spacing:.01em;text-transform:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.45)}",
     "@media(min-width:768px){",
     "#ns-block-slide_1 .media-visual{position:relative;background:#0A0908 url(" + BASE + "hero-fondo.webp) 0% 12%/cover no-repeat}",
-    "#ns-block-slide_1 .media-visual::after{content:'';position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(10,9,8,0) 68%,#0A0908 100%),linear-gradient(90deg,rgba(10,9,8,0) 30%,rgba(10,9,8,.6) 44%,rgba(10,9,8,.72) 100%);pointer-events:none}",
+    "#ns-block-slide_1 .media-visual::after{content:'';position:absolute;inset:0 0 -2px;z-index:0;background:linear-gradient(180deg,rgba(10,9,8,0) 68%,#0A0908 100%),linear-gradient(90deg,rgba(10,9,8,0) 30%,rgba(10,9,8,.6) 44%,rgba(10,9,8,.72) 100%);pointer-events:none}",
     "#ns-block-slide_1 .media-visual img{transform:translateX(5%);clip-path:inset(6.44% 8.23% 6.44% 60.83%)}",
     "#ns-block-slide_1 .media-content{left:40.5%!important;right:auto!important;width:24.5%!important;padding:0!important;z-index:2}",
     "#ns-block-slide_1 .heading-block{font-size:clamp(22px,2.45vw,50px)!important;--block-font-size:clamp(22px,2.45vw,50px)!important;line-height:1.1}",
@@ -60,7 +60,7 @@
     /* Imagen Estatus / Velocidad / Oportunidad: textos corregidos encima de la imagen. */
     "#ns-block-slide_2 .media-visual{position:relative}",
     /* Transición gradual entre el bloque principal y la imagen Estatus / Velocidad / Oportunidad. */
-    "#ns-block-slide_2 .media-visual::before{content:'';position:absolute;left:0;right:0;top:0;height:18%;z-index:1;background:linear-gradient(180deg,#0A0908 0%,rgba(10,9,8,0) 100%);pointer-events:none}",
+    "#ns-block-slide_2 .media-visual::before{content:'';position:absolute;left:0;right:0;top:-2px;height:18%;z-index:1;background:linear-gradient(180deg,#0A0908 0%,rgba(10,9,8,0) 100%);pointer-events:none}",
     "#ns-block-slide_2 .mc-estatus-fix{position:absolute;inset:0;background:url(" + BASE + "estatus-fix.webp) center/100% 100% no-repeat;pointer-events:none}",
     /* Listado: solo el combo, con su precio único. */
     ".js-item-product:not([data-product-id='" + COMBO_ID + "']){display:none!important}",
