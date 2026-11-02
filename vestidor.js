@@ -31,10 +31,22 @@
     ".js-search-expand-form,.search-floating-container{display:none!important}",
     ".sticky-header-wrapper{background:#0A0908!important}",
     "@media(max-width:767px){.head-main .head-row{padding-top:4px!important;padding-bottom:4px!important;grid-template-rows:auto!important;row-gap:0!important}}",
-    /* Inicio: foto de fondo del bloque principal (el hombre a la izquierda, el texto sobre la parte oscura). */
+    /* Inicio, bloque principal: foto de fondo, título con precio, botón y cuadro del outfit (viene de la imagen cargada en el editor). */
+    "#ns-block-slide_1 .media-visual img{position:relative;z-index:1}",
+    ".mc-precio{display:block;width:fit-content;margin-top:.5em;padding:.22em .6em;background:#7A1414;border:1px solid #C9A45C;border-radius:4px;color:#FFF6E3;font-size:1.2em;font-weight:700;line-height:1.15;letter-spacing:.04em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.5)}",
+    "@media(min-width:768px){",
     "#ns-block-slide_1 .media-visual{position:relative;background:#0A0908 url(" + BASE + "hero-fondo.webp) 0% 12%/cover no-repeat}",
-    "#ns-block-slide_1 .media-visual img{visibility:hidden}",
-    "@media(min-width:768px){#ns-block-slide_1 .media-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,9,8,0) 42%,rgba(10,9,8,.55) 62%,rgba(10,9,8,.7) 100%);pointer-events:none}#ns-block-slide_1 .media-content{left:auto!important;right:0!important;width:50%!important}}",
+    "#ns-block-slide_1 .media-visual::after{content:'';position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,rgba(10,9,8,0) 30%,rgba(10,9,8,.6) 44%,rgba(10,9,8,.72) 100%);pointer-events:none}",
+    "#ns-block-slide_1 .media-visual img{transform:translateX(5%);clip-path:inset(6.44% 8.23% 6.44% 60.83%)}",
+    "#ns-block-slide_1 .media-content{left:40.5%!important;right:auto!important;width:24.5%!important;padding:0!important;z-index:2}",
+    "#ns-block-slide_1 .heading-block{font-size:clamp(22px,2.45vw,50px)!important;--block-font-size:clamp(22px,2.45vw,50px)!important;line-height:1.1}",
+    "}",
+    "@media(max-width:767px){",
+    "#ns-block-slide_1{position:relative;background:linear-gradient(180deg,rgba(10,9,8,0) 135px,#0A0908 225px),linear-gradient(90deg,rgba(10,9,8,0) 44%,rgba(10,9,8,.62) 58%) 0 0/100% 225px no-repeat,url(" + BASE + "hero-fondo.webp) 0 0/560px auto no-repeat,#0A0908}",
+    "#ns-block-slide_1 .media-visual{background:none;margin:125px 0 -50px}",
+    "#ns-block-slide_1 .media-visual img{object-position:calc(50vw - 813px) 50%!important;clip-path:inset(32px calc(50% - 165px));transform:scale(.85)}",
+    "#ns-block-slide_1 .heading-block{position:absolute!important;top:30px;left:auto!important;right:12px;transform:none!important;width:158px!important;margin:0!important;padding:0!important;background:none!important;text-align:left!important;font-size:20px!important;--block-mobile-font-size:20px!important;line-height:1.15;z-index:3}",
+    "}",
     /* Espacios entre secciones. */
     "#ns-section-rich-text_1793496225546 .btn{margin:0 0 32px!important}",
     "[id^='ns-section-rich-text_']{padding-top:36px!important}",
@@ -233,9 +245,27 @@
     });
   }
 
+  // Título del bloque principal: "click" y el precio del outfit en un cartel.
+  function fixHero() {
+    var titulos = document.querySelectorAll("[data-block-id='slide_1'] .heading-block");
+    for (var i = 0; i < titulos.length; i++) {
+      var t = titulos[i];
+      if (t.querySelector(".mc-precio")) continue;
+      var n = t.firstChild;
+      for (; n; n = n.nextSibling) {
+        if (n.nodeType === 3) n.nodeValue = n.nodeValue.replace(/\bclic\b/i, "click");
+      }
+      var precio = document.createElement("span");
+      precio.className = "mc-precio";
+      precio.textContent = "$" + String(COMBO_PRICE).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      t.appendChild(precio);
+    }
+  }
+
   function run() {
     if (/^\/checkout\//.test(path)) { fixCheckout(); return; }
     fixEstatus();
+    fixHero();
     var boxes = [document.getElementById("modal-cart")];
     if (/^\/comprar/.test(path)) boxes.push(document.querySelector("main"));
     boxes.forEach(function (b) { if (b) fixCart(b); });
