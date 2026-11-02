@@ -34,7 +34,10 @@
     /* Inicio, bloque principal: foto de fondo, título con precio, botón y cuadro del outfit (viene de la imagen cargada en el editor). */
     "#ns-block-slide_1 .media-visual img{position:relative;z-index:1}",
     ".mc-precio{display:block;width:fit-content;margin-top:.6em;padding:3px 10px;background:#7A1414;border:1px solid #C9A45C;border-radius:999px;color:#FFF6E3;font-family:Nunito,ui-rounded,'SF Pro Rounded','Helvetica Neue',Arial,sans-serif!important;font-size:max(14px,.62em);font-weight:800;font-variant-numeric:lining-nums;line-height:1.25;letter-spacing:.01em;text-transform:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.45)}",
+    ".mc-hero-video{position:absolute;top:0;left:0;height:auto;max-width:none;z-index:0;opacity:0;transition:opacity .8s;pointer-events:none}",
+    ".mc-hero-video.mc-on{opacity:1}",
     "@media(min-width:768px){",
+    ".mc-hero-video{width:100%}",
     "#ns-block-slide_1 .media-visual{position:relative;aspect-ratio:2576/1438;background:#0A0908 url(" + BASE + "hero-fondo.webp) 0 0/100% auto no-repeat}",
     "#ns-block-slide_1 .media-visual::after{content:'';position:absolute;inset:0 0 -2px;z-index:0;background:linear-gradient(180deg,rgba(10,9,8,0) 90%,#0A0908 100%),linear-gradient(90deg,rgba(10,9,8,0) 30%,rgba(10,9,8,.6) 44%,rgba(10,9,8,.72) 100%);pointer-events:none}",
     "#ns-block-slide_1 .media-visual img{transform:translateX(5%);clip-path:inset(6.44% 8.23% 6.44% 60.83%)}",
@@ -42,6 +45,7 @@
     "#ns-block-slide_1 .heading-block{font-size:clamp(22px,2.45vw,50px)!important;--block-font-size:clamp(22px,2.45vw,50px)!important;line-height:1.1}",
     "}",
     "@media(max-width:767px){",
+    ".mc-hero-video{width:560px;-webkit-mask-image:linear-gradient(180deg,#000 135px,transparent 225px),linear-gradient(90deg,#000 44%,rgba(0,0,0,.05) 58%);mask-image:linear-gradient(180deg,#000 135px,transparent 225px),linear-gradient(90deg,#000 44%,rgba(0,0,0,.05) 58%);-webkit-mask-composite:source-in;mask-composite:intersect}",
     "#ns-block-slide_1{position:relative;background:linear-gradient(180deg,rgba(10,9,8,0) 135px,#0A0908 225px),linear-gradient(90deg,rgba(10,9,8,0) 44%,rgba(10,9,8,.62) 58%) 0 0/100% 225px no-repeat,url(" + BASE + "hero-fondo.webp) 0 0/560px auto no-repeat,#0A0908}",
     "#ns-block-slide_1 .media-visual{background:none;margin:125px 0 -50px}",
     "#ns-block-slide_1 .media-visual img{object-position:calc(50vw - 813px) 50%!important;clip-path:inset(32px calc(50% - 165px));transform:scale(.85)}",
@@ -272,10 +276,33 @@
     }
   }
 
+  // Fondo en movimiento del bloque principal. Hasta que arranca (o si no puede reproducirse) queda la foto.
+  function heroVideo() {
+    var slide = document.querySelector(".swiper-slide:not(.swiper-slide-duplicate)[data-block-id='slide_1']");
+    if (!slide || document.querySelector(".mc-hero-video")) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var compu = window.matchMedia("(min-width:768px)").matches;
+    var v = document.createElement("video");
+    v.className = "mc-hero-video";
+    v.muted = true;
+    v.loop = true;
+    v.autoplay = true;
+    v.playsInline = true;
+    v.setAttribute("muted", "");
+    v.setAttribute("playsinline", "");
+    v.setAttribute("aria-hidden", "true");
+    v.addEventListener("playing", function () { v.classList.add("mc-on"); });
+    v.addEventListener("canplay", function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); });
+    v.src = BASE + (compu ? "hero-fondo.mp4" : "hero-fondo-chico.mp4");
+    var caja = compu ? slide.querySelector(".media-visual") : slide;
+    caja.insertBefore(v, caja.firstChild);
+  }
+
   function run() {
     if (/^\/checkout\//.test(path)) { fixCheckout(); return; }
     fixEstatus();
     fixHero();
+    heroVideo();
     var boxes = [document.getElementById("modal-cart")];
     if (/^\/comprar/.test(path)) boxes.push(document.querySelector("main"));
     boxes.forEach(function (b) { if (b) fixCart(b); });

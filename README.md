@@ -20,6 +20,6 @@ combo, empezando en 0), `box` (x, y, ancho, alto sobre un lienzo de 1500×2009),
 ## Ajustes de la tienda
 `vestidor.js` también aplica, en todas las páginas, los ajustes que el editor de Tienda Nube no permite: solo se vende el combo (las prendas sueltas redirigen a él), el carrito muestra el color elegido y el precio único, y hay correcciones visuales en el inicio y el encabezado. Si cambia el precio del combo, actualizar `COMBO_PRICE`.
 
-`hero-fondo.webp` es la foto de fondo del bloque principal del inicio. El cuadro del outfit sigue saliendo de la imagen cargada en el editor de Tienda Nube: `vestidor.js` recorta esa imagen, así que si se cambia hay que mantener el cuadro en el mismo lugar. El cartel del precio usa `COMBO_PRICE`.
+`hero-fondo.webp` es la foto de fondo del bloque principal del inicio y `hero-fondo.mp4` / `hero-fondo-chico.mp4` (celular) son su versión en movimiento, que se muestra encima cuando arranca. El cuadro del outfit sigue saliendo de la imagen cargada en el editor de Tienda Nube: `vestidor.js` recorta esa imagen, así que si se cambia hay que mantener el cuadro en el mismo lugar. El cartel del precio usa `COMBO_PRICE`.
 
 `estatus-fix.webp` son los textos corregidos que van encima de la imagen Estatus / Velocidad / Oportunidad.
