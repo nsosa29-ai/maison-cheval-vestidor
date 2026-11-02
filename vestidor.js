@@ -33,7 +33,7 @@
     "@media(max-width:767px){.head-main .head-row{padding-top:4px!important;padding-bottom:4px!important;grid-template-rows:auto!important;row-gap:0!important}}",
     /* Inicio, bloque principal: foto de fondo, título con precio, botón y cuadro del outfit (viene de la imagen cargada en el editor). */
     "#ns-block-slide_1 .media-visual img{position:relative;z-index:1}",
-    ".mc-precio{display:block;width:fit-content;margin-top:.5em;padding:.22em .6em;background:#7A1414;border:1px solid #C9A45C;border-radius:4px;color:#FFF6E3;font-size:1.2em;font-weight:700;line-height:1.15;letter-spacing:.04em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.5)}",
+    ".mc-precio{display:block;width:fit-content;margin-top:.6em;padding:3px 10px;background:#7A1414;border:1px solid #C9A45C;border-radius:999px;color:#FFF6E3;font-family:Nunito,ui-rounded,'SF Pro Rounded','Helvetica Neue',Arial,sans-serif!important;font-size:max(14px,.62em);font-weight:800;font-variant-numeric:lining-nums;line-height:1.25;letter-spacing:.01em;text-transform:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.45)}",
     "@media(min-width:768px){",
     "#ns-block-slide_1 .media-visual{position:relative;background:#0A0908 url(" + BASE + "hero-fondo.webp) 0% 12%/cover no-repeat}",
     "#ns-block-slide_1 .media-visual::after{content:'';position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,rgba(10,9,8,0) 30%,rgba(10,9,8,.6) 44%,rgba(10,9,8,.72) 100%);pointer-events:none}",
@@ -85,6 +85,14 @@
   style.id = "mc-tienda-css";
   style.textContent = CSS;
   (document.head || document.documentElement).appendChild(style);
+
+  // Tipografía del cartel del precio (solo el inicio).
+  if (path === "/") {
+    var fuente = document.createElement("link");
+    fuente.rel = "stylesheet";
+    fuente.href = "https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap";
+    (document.head || document.documentElement).appendChild(fuente);
+  }
 
   // El botón de compra del listado abría una compra rápida del combo sin elegir colores.
   document.addEventListener("click", function (e) {
