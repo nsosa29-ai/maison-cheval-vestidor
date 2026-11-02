@@ -209,7 +209,28 @@
     });
   }
 
+  // Resumen del checkout: la misma foto del color elegido que en el carrito.
+  var POR_NOMBRE = [[/^camisa/, "shirt"], [/^pantalon/, "pants"], [/^zapato/, "shoes"], [/^cinturon/, "belt"]];
+  function fixCheckout() {
+    if (!colores) return;
+    [].forEach.call(document.images, function (img) {
+      var m = /^(.+?)\s*\(([^,)]+)/.exec(img.alt || "");
+      if (!m) return;
+      var capa = null;
+      POR_NOMBRE.forEach(function (p) { if (p[0].test(norm(m[1]))) capa = p[1]; });
+      if (!capa) return;
+      var n = (colores[capa] || []).map(norm).indexOf(norm(m[2]));
+      if (n < 0) return;
+      var src = BASE + capa + "-" + n + ".webp";
+      if (img.getAttribute("src") === src) return;
+      img.removeAttribute("srcset");
+      img.classList.add("mc-thumb");
+      img.src = src;
+    });
+  }
+
   function run() {
+    if (/^\/checkout\//.test(path)) { fixCheckout(); return; }
     fixEstatus();
     var boxes = [document.getElementById("modal-cart")];
     if (/^\/comprar/.test(path)) boxes.push(document.querySelector("main"));
@@ -224,7 +245,7 @@
 
   function boot() {
     run();
-    new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true, characterData: true });
+    new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["src"] });
     try { if (sessionStorage.getItem("mc-vaciar")) setTimeout(siguiente, 800); } catch (e) {}
   }
   if (document.body) boot();
