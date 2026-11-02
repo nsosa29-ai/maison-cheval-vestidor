@@ -36,7 +36,10 @@
     "[id^='ns-section-rich-text_']{padding-top:36px!important}",
     "#ns-section-banners_grid_3_vertical{padding-top:32px!important}",
     "#ns-section-banners_grid_3_vertical::before{margin-bottom:28px!important}",
-    "#ns-section-icon-text_1793497152414{padding:32px 0!important}",
+    ".rich-text-section{padding-top:12px!important;padding-bottom:12px!important}",
+    "#ns-section-icon-text_1793497152414{padding:24px 0!important}",
+    "#ns-section-icon-text_1793497152414>div{padding:0!important}",
+    "#ns-block-slide_2 .placeholder{display:none!important}",
     "#ns-section-newsletter_1793497205771{padding:0 16px 40px!important}",
     /* Imagen Estatus / Velocidad / Oportunidad: textos corregidos encima de la imagen. */
     "#ns-block-slide_2 .media-visual{position:relative}",
