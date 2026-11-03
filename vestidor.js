@@ -16,7 +16,7 @@
 
   var path = location.pathname;
   var script = document.currentScript;
-  var BASE = script ? script.src.replace(/[^/]*(\?.*)?$/, "") : "https://subtle-centaur-dc0a3a.netlify.app/";
+  var BASE = script ? script.src.replace(/[^/]*(\?.*)?$/, "") : "https://nsosa29-ai.github.io/maison-cheval-vestidor/";
 
   // Prendas sueltas y buscador: todo lleva al armador del outfit.
   if ((/^\/productos\/[^/]+/.test(path) && !/^\/productos\/outfit-combo/.test(path)) || /^\/search(\/|$)/.test(path)) {
@@ -337,7 +337,7 @@
   window.__mcVest = true;
 
   var script = document.currentScript;
-  var BASE = script ? script.src.replace(/[^/]*(\?.*)?$/, "") : "https://subtle-centaur-dc0a3a.netlify.app/";
+  var BASE = script ? script.src.replace(/[^/]*(\?.*)?$/, "") : "https://nsosa29-ai.github.io/maison-cheval-vestidor/";
   var REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var CSS = [

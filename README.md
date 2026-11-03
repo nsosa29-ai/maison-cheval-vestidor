@@ -1,7 +1,7 @@
 # Vestidor Maison Cheval
 
 Probador del combo "Armá tu outfit" de maisoncheval.mitiendanube.com.
-Netlify publica esta carpeta y Google Tag Manager carga `vestidor.js` en la página del combo.
+GitHub Pages publica esta carpeta (rama `main`) y Google Tag Manager carga `vestidor.js` desde https://nsosa29-ai.github.io/maison-cheval-vestidor/ en todas las páginas de la tienda. Los cambios pueden tardar hasta 10 minutos en verse, por la caché de GitHub Pages.
 
 ## Cómo agregar un color
 1. Cargar la variante en Tienda Nube (el combo de Bundle Flow la toma solo).
