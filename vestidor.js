@@ -362,7 +362,16 @@
     "#mc-vest .mc-hint.alt{background:#0d0b09cc;color:#efe6d6;border:1px solid #c9a24f88}",
     "#mc-vest .mc-hint svg{width:14px;height:14px;flex:none}",
     "#mc-vest .mc-load{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:#b1a99a;color:#3d382f;font:12px Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase}",
-    "@media (prefers-reduced-motion:reduce){#mc-vest .mc-cam,#mc-vest img.mc-l{transition:none}#mc-vest .mc-sweep.go{animation:none}}"
+    /* Celular: al bajar a elegir, el maniquí queda fijo y más chico debajo del encabezado. */
+    "#mc-band{display:none;position:fixed;top:0;left:0;right:0;z-index:998;background:#0A0908;border-bottom:1px solid #c9a24f66;box-shadow:0 6px 14px #0009}",
+    "#mc-band.on{display:block}",
+    "#mc-vest.mc-mini{position:fixed;z-index:999;left:50%;aspect-ratio:auto;border-radius:0;animation:mcmini .25s ease-out}",
+    "@keyframes mcmini{from{opacity:0}to{opacity:1}}",
+    "#mc-vest.mc-mini .mc-pill{top:6px;font-size:10px;letter-spacing:.08em}",
+    "#mc-vest.mc-mini .mc-lab{left:6px;padding:4px 8px}",
+    "#mc-vest.mc-mini .mc-hint{right:6px;min-height:28px;padding:4px 8px;font-size:10px;letter-spacing:.04em}",
+    "#mc-vest.mc-mini .mc-i{display:none}",
+    "@media (prefers-reduced-motion:reduce){#mc-vest .mc-cam,#mc-vest img.mc-l{transition:none}#mc-vest .mc-sweep.go{animation:none}#mc-vest.mc-mini{animation:none}}"
   ].join("\n");
 
   function norm(s) {
@@ -439,8 +448,63 @@
 
     host.innerHTML = "";
     host.appendChild(root);
-    window.addEventListener("resize", frame);
+    band = document.createElement("div");
+    band.id = "mc-band";
+    host.appendChild(band);
+    window.addEventListener("resize", function () { frame(); queueDock(); });
+    window.addEventListener("scroll", queueDock, { passive: true });
+    var wrap = document.querySelector(".sticky-header-wrapper");
+    if (wrap) wrap.addEventListener("transitionend", queueDock);
     frame();
+    queueDock();
+  }
+
+  var band, docked = false, miniH = 0, dockQueued = false, dockLater;
+
+  function queueDock() {
+    // El encabezado se anima al bajar: se vuelve a medir cuando termina.
+    clearTimeout(dockLater);
+    dockLater = setTimeout(dock, 350);
+    if (dockQueued) return;
+    dockQueued = true;
+    requestAnimationFrame(function () { dockQueued = false; dock(); });
+  }
+
+  // En celular, cuando el vestidor grande se va de la pantalla, lo reemplaza una versión
+  // chica fija, hasta terminar de elegir. El lugar original conserva su alto para que la página no salte.
+  function dock() {
+    if (!root) return;
+    var host = root.parentNode;
+    var form = document.querySelector(".bf-mix-match");
+    var head = document.querySelector(".head-main");
+    var top = head ? Math.max(0, head.getBoundingClientRect().bottom) : 0;
+    if (!docked) miniH = Math.round(Math.min(320, Math.max(200, window.innerHeight * 0.36)));
+    var on = window.innerWidth < 768 && window.innerHeight >= 520 && !!form &&
+      host.getBoundingClientRect().bottom < top + miniH &&
+      form.getBoundingClientRect().bottom > top + miniH + 60;
+    if (on) {
+      root.style.top = top + "px";
+      band.style.height = top + miniH + "px";
+      document.documentElement.style.scrollPaddingTop = top + miniH + 8 + "px";
+    }
+    if (on === docked) return;
+    docked = on;
+    cam.style.transition = "none";
+    if (on) {
+      var w = Math.round(miniH * W / H);
+      host.style.height = (host.clientWidth * H) / W + "px";
+      root.style.height = miniH + "px";
+      root.style.width = w + "px";
+      root.style.marginLeft = -w / 2 + "px";
+    } else {
+      host.style.height = root.style.top = root.style.height = root.style.width = root.style.marginLeft = "";
+      document.documentElement.style.scrollPaddingTop = "";
+    }
+    root.classList.toggle("mc-mini", on);
+    band.classList.toggle("on", on);
+    frame();
+    void cam.offsetWidth;
+    cam.style.transition = "";
   }
 
   function frame() {
