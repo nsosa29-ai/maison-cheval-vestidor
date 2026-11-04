@@ -31,6 +31,9 @@
     ".js-search-expand-form,.search-floating-container{display:none!important}",
     ".sticky-header-wrapper{background:#0A0908!important}",
     "@media(max-width:767px){.head-main .head-row{padding-top:4px!important;padding-bottom:4px!important;grid-template-rows:auto!important;row-gap:0!important}}",
+    /* Logo: tamaño fijo. Sin esto el tema lo deja en ancho 0 hasta que termina de cargar y lo muestra tarde y chico. */
+    ".logo-img{height:48px!important;max-height:none!important;width:auto!important;max-width:none!important;aspect-ratio:1712/460}",
+    "@media(min-width:768px){.logo-img{height:60px!important}}",
     /* Inicio, bloque principal: foto de fondo, título con precio, botón y cuadro del outfit (viene de la imagen cargada en el editor). */
     "#ns-block-slide_1 .media-visual img{position:relative;z-index:1}",
     ".mc-precio{display:block;width:fit-content;margin-top:.6em;padding:3px 10px;background:#7A1414;border:1px solid #C9A45C;border-radius:999px;color:#FFF6E3;font-family:Nunito,ui-rounded,'SF Pro Rounded','Helvetica Neue',Arial,sans-serif!important;font-size:max(14px,.62em);font-weight:800;font-variant-numeric:lining-nums;line-height:1.25;letter-spacing:.01em;text-transform:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.45)}",
