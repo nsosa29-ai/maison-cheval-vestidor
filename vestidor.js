@@ -389,12 +389,14 @@
     "#mc-vest .mc-hint.alt{background:#0d0b09cc;color:#efe6d6;border:1px solid #c9a24f88}",
     "#mc-vest .mc-hint svg{width:14px;height:14px;flex:none}",
     /* Botón "Más vendidos": lleva al carrusel de abajo. Aparece recién cuando el carrusel ya cargó. */
-    "#mc-vest .mc-top{left:12px;top:48px;display:none;align-items:center;gap:6px;min-height:32px;padding:6px 14px;background:#c9a24f;color:#0d0b09;font:700 11px/1 Arial,sans-serif;letter-spacing:.12em;cursor:pointer;box-shadow:0 2px 8px #0005;transition:background .2s}",
+    /* Va abajo a la izquierda, en dos líneas: es el único lugar donde no tapa el maniquí ni los zapatos. */
+    "#mc-vest .mc-top{left:12px;top:auto;bottom:12px;display:none;align-items:center;gap:6px;padding:7px 10px;border-radius:12px;background:#c9a24f;color:#0d0b09;font:700 11px/1.2 Arial,sans-serif;letter-spacing:.06em;text-align:left;cursor:pointer;box-shadow:0 2px 8px #0005;transition:background .2s}",
     ".mc-hay-looks #mc-vest .mc-top{display:inline-flex}",
     "#mc-vest .mc-top:hover{background:#dbb560}",
     "#mc-vest .mc-top:focus-visible{outline:2px solid #fff;outline-offset:2px}",
     "#mc-vest .mc-top svg{width:14px;height:14px;flex:none}",
-    "#mc-vest.mc-mini .mc-top{left:6px;top:38px;min-height:28px;padding:4px 8px;font-size:10px;letter-spacing:.04em}",
+    "@media(max-width:480px){#mc-vest .mc-top .mc-i{display:none}}",
+    "#mc-vest.mc-mini .mc-top{left:4px;top:auto;bottom:4px;padding:4px 6px;border-radius:8px;font-size:9px;letter-spacing:0}",
     "#mc-vest .mc-load{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:#b1a99a;color:#3d382f;font:12px Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase}",
     /* Celular: al bajar a elegir, el maniquí queda fijo y más chico debajo del encabezado. */
     "#mc-band{display:none;position:fixed;top:0;left:0;right:0;z-index:998;background:#0A0908;border-bottom:1px solid #c9a24f66;box-shadow:0 6px 14px #0009}",
@@ -447,7 +449,7 @@
     root.innerHTML =
       '<span class="mc-pill mc-lab">Vestidor</span>' +
       '<button type="button" class="mc-pill mc-hint"><span class="mc-i"></span><span class="mc-t"></span></button>' +
-      '<button type="button" class="mc-pill mc-top"><span class="mc-i">' + ICON_DOWN + '</span><span>Más vendidos</span></button>' +
+      '<button type="button" class="mc-pill mc-top"><span class="mc-i">' + ICON_DOWN + '</span><span>Más<br>vendidos</span></button>' +
       '<div class="mc-cam"></div><div class="mc-sweep"></div>' +
       '<div class="mc-load">Preparando el probador…</div>';
     cam = root.querySelector(".mc-cam");
