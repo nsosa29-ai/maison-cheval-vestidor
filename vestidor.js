@@ -623,3 +623,62 @@
     .then(function (c) { cfg = c; W = c.canvas[0]; H = c.canvas[1]; start(); })
     .catch(function (e) { console.warn("[vestidor] no se pudo cargar config.json", e); });
 })();
+
+/*
+ * Combinaciones recomendadas en la página del combo.
+ * Copia el título y el carrusel desde el inicio cada vez que se abre la página, así lo que se
+ * cambie en el editor de Tienda Nube (fotos, nombres, orden) aparece igual en los dos lugares.
+ * Si se borran esas secciones del inicio y se crean de nuevo, actualizar los dos ids.
+ */
+(function () {
+  if (!/^\/productos\/outfit-combo/.test(location.pathname) || window.__mcLooks) return;
+  window.__mcLooks = true;
+
+  var SECCIONES = ["ns-section-rich-text_1793496824174", "ns-section-banners_1793496847658"];
+
+  // Mismas opciones que usa el tema en el inicio, leídas de los datos de la sección.
+  function carrusel(c) {
+    var gap = +c.getAttribute("data-gap-horizontal") || 16;
+    var tries = 0;
+    (function tick() {
+      if (!window.Swiper) {
+        if (++tries < 80) setTimeout(tick, 250);
+        return;
+      }
+      new window.Swiper(c.querySelector(".js-banners-slider"), {
+        slidesPerView: +c.getAttribute("data-columns-mobile") || 1,
+        spaceBetween: gap,
+        loop: true,
+        navigation: { nextEl: c.querySelector(".js-swiper-banners-next"), prevEl: c.querySelector(".js-swiper-banners-prev") },
+        pagination: { el: c.querySelector(".js-swiper-banners-pagination"), clickable: true },
+        breakpoints: { 768: { slidesPerView: +c.getAttribute("data-columns-desktop") || 3, spaceBetween: gap } }
+      });
+    })();
+  }
+
+  function poner(html) {
+    var prod = document.getElementById("ns-section-main_product");
+    var doc = new DOMParser().parseFromString(html, "text/html");
+    var nodos = SECCIONES.map(function (id) { return doc.getElementById(id); });
+    if (!prod || !nodos[0] || !nodos[1]) return;
+    var box = document.createElement("div");
+    box.id = "mc-looks";
+    nodos.forEach(function (n) {
+      // Sin los espacios de las apps del inicio ni el enlace de cada foto, que acá sacaría de la página.
+      [].forEach.call(n.querySelectorAll(".js-nubesdk-slot,a.media-link"), function (x) { x.parentNode.removeChild(x); });
+      box.appendChild(document.importNode(n, true));
+    });
+    prod.parentNode.insertBefore(box, prod.nextSibling);
+    var c = box.querySelector(".js-banners-slider-container");
+    if (c) carrusel(c);
+  }
+
+  function cargar() {
+    fetch("/", { credentials: "same-origin" })
+      .then(function (r) { return r.text(); })
+      .then(poner)
+      .catch(function (e) { console.warn("[vestidor] no se pudieron cargar las combinaciones", e); });
+  }
+  if (document.readyState === "complete") cargar();
+  else window.addEventListener("load", cargar);
+})();
