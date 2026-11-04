@@ -40,11 +40,14 @@
     ".mc-precio{display:block;width:fit-content;margin-top:.6em;padding:3px 10px;background:#7A1414;border:1px solid #C9A45C;border-radius:999px;color:#FFF6E3;font-family:Nunito,ui-rounded,'SF Pro Rounded','Helvetica Neue',Arial,sans-serif!important;font-size:max(14px,.62em);font-weight:800;font-variant-numeric:lining-nums;line-height:1.25;letter-spacing:.01em;text-transform:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.45)}",
     ".mc-hero-video{position:absolute;top:0;left:0;height:auto;max-width:none;z-index:0;opacity:0;transition:opacity .8s;pointer-events:none}",
     ".mc-hero-video.mc-on{opacity:1}",
-    /* Botón a Instagram, debajo del botón principal. */
-    ".mc-ig{order:2;display:inline-flex;align-items:center;justify-content:center;gap:8px;width:fit-content;min-height:44px;margin:12px 0 0;padding:10px 16px;box-sizing:border-box;background:rgba(10,9,8,.55);border:1px solid #C9A45C;border-radius:6px;color:#F2EADB!important;font-family:Cinzel,Georgia,serif;font-size:12px;font-weight:600;line-height:1.2;letter-spacing:.08em;text-transform:uppercase;text-decoration:none!important;white-space:nowrap;position:relative;z-index:3;transition:background .2s,color .2s}",
-    ".mc-ig:hover{background:#C9A45C;color:#140F08!important}",
+    /* Botón a Instagram en el encabezado, antes de los íconos de cuenta y carrito. */
+    ".mc-ig{position:absolute;top:50%;right:calc(100% + 66px);transform:translateY(-50%);z-index:5;display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:#C9A45C;color:#140F08!important;transition:background .2s}",
+    ".mc-ig::after{content:'';position:absolute;inset:-6px}",
+    ".mc-ig:hover{background:#E0BE78}",
     ".mc-ig:focus-visible{outline:2px solid #F2EADB;outline-offset:2px}",
-    ".mc-ig svg{width:16px;height:16px;flex:none}",
+    ".mc-ig svg{width:17px!important;height:17px!important;fill:currentColor}",
+    "@media(max-width:767px){.mc-ig{right:calc(100% + 6px);width:24px;height:24px}.mc-ig svg{width:14px!important;height:14px!important}}",
+    "@media(max-width:349px){.mc-ig{display:none}}",
     "@media(min-width:768px){",
     ".mc-hero-video{width:100%}",
     "#ns-block-slide_1 .media-visual{position:relative;aspect-ratio:2576/1438;background:#0A0908 url(" + BASE + "hero-fondo.webp) 0 0/100% auto no-repeat}",
@@ -285,21 +288,18 @@
     }
   }
 
-  // Botón a Instagram, debajo del botón principal del inicio.
+  // Botón a Instagram en el encabezado (todas las páginas).
   function fixInstagram() {
-    var botones = document.querySelectorAll("[data-block-id='slide_1'] a.btn-primary");
-    for (var i = 0; i < botones.length; i++) {
-      var sig = botones[i].nextElementSibling;
-      if (sig && sig.classList.contains("mc-ig")) continue;
-      var a = document.createElement("a");
-      a.className = "mc-ig";
-      a.href = INSTAGRAM_URL;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      a.setAttribute("aria-label", "Seguinos en Instagram (se abre en otra pestaña)");
-      a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor"/></svg><span>Seguinos en Instagram</span>';
-      botones[i].parentNode.insertBefore(a, botones[i].nextSibling);
-    }
+    var carrito = document.querySelector(".head-main #ajax-cart");
+    if (!carrito || carrito.querySelector(".mc-ig")) return;
+    var a = document.createElement("a");
+    a.className = "mc-ig";
+    a.href = INSTAGRAM_URL;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.setAttribute("aria-label", "Seguinos en Instagram (se abre en otra pestaña)");
+    a.innerHTML = '<svg class="icon-inline" aria-hidden="true"><use xlink:href="#instagram"></use></svg>';
+    carrito.appendChild(a);
   }
 
   // Fondo en movimiento del bloque principal. Hasta que arranca (o si no puede reproducirse) queda la foto.
