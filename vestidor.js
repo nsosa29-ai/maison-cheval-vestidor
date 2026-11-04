@@ -92,6 +92,8 @@
     ".bf-mix-match-title{color:#140F08!important}",
     ".bf-mix-match-title::after{margin-left:0!important}",
     ".bf-mix-match-summary-list,.bf-mix-match-summary-savings{display:none!important}",
+    /* Cartel en el cuadro del reloj (quinta prenda del combo). */
+    ".bf-mix-match-unit-row[data-bf-slot='4'] .bf-mix-match-unit-product::after{content:'Último modelo disponible';display:inline-block;margin-top:5px;padding:3px 10px;background:#7A1414;border:1px solid #C9A45C;border-radius:999px;color:#FFF6E3;font:700 12px/1.3 Arial,sans-serif;letter-spacing:.01em;white-space:nowrap}",
     /* Carrito: el outfit se compra entero. */
     ".mc-combo .cart-item-quantity,.mc-combo .cart-item-delete,.mc-combo .cart-item-subtotal,.mc-combo .js-total-promotions{display:none!important}",
     ".js-payment-discount-price-cart-container,.cart-continue-shopping{display:none!important}",
