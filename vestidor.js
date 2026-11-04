@@ -449,7 +449,7 @@
     root.innerHTML =
       '<span class="mc-pill mc-lab">Vestidor</span>' +
       '<button type="button" class="mc-pill mc-hint"><span class="mc-i"></span><span class="mc-t"></span></button>' +
-      '<button type="button" class="mc-pill mc-top"><span class="mc-i">' + ICON_DOWN + '</span><span>Más<br>vendidos</span></button>' +
+      '<button type="button" class="mc-pill mc-top" aria-label="Ver los más vendidos"><span class="mc-i">' + ICON_DOWN + '</span><span>Más<br>vendidos</span></button>' +
       '<div class="mc-cam"></div><div class="mc-sweep"></div>' +
       '<div class="mc-load">Preparando el probador…</div>';
     cam = root.querySelector(".mc-cam");
