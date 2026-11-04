@@ -388,6 +388,13 @@
     "#mc-vest .mc-hint:focus-visible{outline:2px solid #fff;outline-offset:2px}",
     "#mc-vest .mc-hint.alt{background:#0d0b09cc;color:#efe6d6;border:1px solid #c9a24f88}",
     "#mc-vest .mc-hint svg{width:14px;height:14px;flex:none}",
+    /* Botón "Más vendidos": lleva al carrusel de abajo. Aparece recién cuando el carrusel ya cargó. */
+    "#mc-vest .mc-top{left:12px;top:48px;display:none;align-items:center;gap:6px;min-height:32px;padding:6px 14px;background:#c9a24f;color:#0d0b09;font:700 11px/1 Arial,sans-serif;letter-spacing:.12em;cursor:pointer;box-shadow:0 2px 8px #0005;transition:background .2s}",
+    ".mc-hay-looks #mc-vest .mc-top{display:inline-flex}",
+    "#mc-vest .mc-top:hover{background:#dbb560}",
+    "#mc-vest .mc-top:focus-visible{outline:2px solid #fff;outline-offset:2px}",
+    "#mc-vest .mc-top svg{width:14px;height:14px;flex:none}",
+    "#mc-vest.mc-mini .mc-top{left:6px;top:38px;min-height:28px;padding:4px 8px;font-size:10px;letter-spacing:.04em}",
     "#mc-vest .mc-load{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:#b1a99a;color:#3d382f;font:12px Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase}",
     /* Celular: al bajar a elegir, el maniquí queda fijo y más chico debajo del encabezado. */
     "#mc-band{display:none;position:fixed;top:0;left:0;right:0;z-index:998;background:#0A0908;border-bottom:1px solid #c9a24f66;box-shadow:0 6px 14px #0009}",
@@ -412,6 +419,16 @@
   var last = null; // última prenda tocada
   var ICON_FULL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
   var ICON_ZOOM = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>';
+  var ICON_DOWN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7"/></svg>';
+
+  // Baja hasta el carrusel, dejando el título a la vista debajo del encabezado fijo.
+  function irALooks() {
+    var looks = document.getElementById("mc-looks");
+    if (!looks) return;
+    var head = document.querySelector(".head-main");
+    var alto = head ? Math.max(0, head.getBoundingClientRect().bottom) : 0;
+    window.scrollTo({ top: looks.getBoundingClientRect().top + window.pageYOffset - alto, behavior: REDUCED ? "auto" : "smooth" });
+  }
 
   function place(el, box) {
     el.style.left = (box[0] / W) * 100 + "%";
@@ -430,6 +447,7 @@
     root.innerHTML =
       '<span class="mc-pill mc-lab">Vestidor</span>' +
       '<button type="button" class="mc-pill mc-hint"><span class="mc-i"></span><span class="mc-t"></span></button>' +
+      '<button type="button" class="mc-pill mc-top"><span class="mc-i">' + ICON_DOWN + '</span><span>Más vendidos</span></button>' +
       '<div class="mc-cam"></div><div class="mc-sweep"></div>' +
       '<div class="mc-load">Preparando el probador…</div>';
     cam = root.querySelector(".mc-cam");
@@ -440,6 +458,7 @@
       if (auto && view) { auto = false; focus(null); }   // ver outfit completo y dejarlo fijo
       else { auto = true; focus(last); }                  // volver a acercar prendas
     };
+    root.querySelector(".mc-top").onclick = irALooks;
     paint();
 
     var loads = [];
@@ -669,6 +688,7 @@
       box.appendChild(document.importNode(n, true));
     });
     prod.parentNode.insertBefore(box, prod.nextSibling);
+    document.documentElement.classList.add("mc-hay-looks"); // muestra el botón "Más vendidos" del vestidor
     var c = box.querySelector(".js-banners-slider-container");
     if (c) carrusel(c);
   }

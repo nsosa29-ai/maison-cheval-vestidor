@@ -25,7 +25,7 @@ combo, empezando en 0), `box` (x, y, ancho, alto sobre un lienzo de 1500×2009),
 `estatus-fix.webp` son los textos corregidos que van encima de la imagen Estatus / Velocidad / Oportunidad.
 
 ## Combinaciones recomendadas en el combo
-La página del combo muestra, debajo del armador, el título y el carrusel de "Combinaciones recomendadas" del inicio. `vestidor.js` los copia del inicio cada vez que se abre la página: para cambiar fotos, nombres u orden alcanza con editarlos en Tienda Nube. Si se borran esas secciones del inicio y se crean de nuevo, hay que actualizar los ids en `SECCIONES`.
+La página del combo muestra, debajo del armador, el título y el carrusel de "Combinaciones recomendadas" del inicio. `vestidor.js` los copia del inicio cada vez que se abre la página: para cambiar fotos, nombres u orden alcanza con editarlos en Tienda Nube. Si se borran esas secciones del inicio y se crean de nuevo, hay que actualizar los ids en `SECCIONES`. El botón "Más vendidos" del vestidor baja hasta ese carrusel y solo aparece si el carrusel cargó.
 
 ## Logo
 `logo/` tiene las versiones del logo, sacadas de la imagen original: `logo-linea.png` (encabezado), `favicon.png`, `compartir.png` (imagen al compartir el link), `logo-cuadrado.png` (perfiles, como Instagram) y `simbolo.png` (solo el caballo, con fondo transparente). Las tres primeras se cargan en Tienda Nube, en Diseño > Identidad de tu tienda.
