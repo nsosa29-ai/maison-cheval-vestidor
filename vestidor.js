@@ -396,7 +396,7 @@
     "#mc-vest .mc-top:focus-visible{outline:2px solid #fff;outline-offset:2px}",
     "#mc-vest .mc-top svg{width:14px;height:14px;flex:none}",
     "@media(max-width:480px){#mc-vest .mc-top .mc-i{display:none}}",
-    "#mc-vest.mc-mini .mc-top{left:4px;top:auto;bottom:4px;padding:4px 6px;border-radius:8px;font-size:9px;letter-spacing:0}",
+    "#mc-vest.mc-mini .mc-pill.mc-top{left:4px;top:auto;bottom:4px;padding:4px 6px;border-radius:8px;font-size:9px;letter-spacing:0}",
     "#mc-vest .mc-load{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:#b1a99a;color:#3d382f;font:12px Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase}",
     /* Celular: al bajar a elegir, el maniquí queda fijo y más chico debajo del encabezado. */
     "#mc-band{display:none;position:fixed;top:0;left:0;right:0;z-index:998;background:#0A0908;border-bottom:1px solid #c9a24f66;box-shadow:0 6px 14px #0009}",
